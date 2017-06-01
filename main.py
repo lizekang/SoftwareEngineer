@@ -1,9 +1,8 @@
-#! /usr/bin/python3
+#! /usr/bin/python2
 # -*- coding:utf-8 -*-
 
 
 import math
-import matplotlib.pyplot as plt
 import turtle
 
 
@@ -26,6 +25,10 @@ class Circle1(object):
         self.r = r
 
 
+def p(num):
+    return pow(num, 2)
+
+
 def point_with_2edges(edge1, edge2):
     A1 = edge1.A
     A2 = edge2.A
@@ -33,8 +36,6 @@ def point_with_2edges(edge1, edge2):
     B2 = edge2.B
     C1 = edge1.C
     C2 = edge2.C
-    # print(A1, B1, C1)
-    # print(A2, B2, C2)
     x = ((C1 * B2 - B1 * C2)/(A2 * B1 - A1 * B2) if C1 * B2 - B1 * C2 != 0 else 0)
     y = ((A1 * C2 - A2 * C1) / (A2 * B1 - A1 * B2) if A1 * C2 - A2 * C1 != 0 else 0)
     return Point(x, y)
@@ -46,7 +47,6 @@ def suround_by_2edges_and_1circle(edge1, edge2, circle):
     r = (point2point(point1, circle.point) - circle.r) / (1 + math.sqrt(2))
     point = Point(point1.x + math.sqrt(2)*(point2.x - point1.x)/(circle.r + (1+math.sqrt(2))*r)*r,
                   point1.y + math.sqrt(2)*(point2.y - point1.y)/(circle.r + (1+math.sqrt(2))*r)*r)
-    print point.x, point.y
     return Circle1(point, r)
 
 
@@ -68,22 +68,18 @@ def surround_by_3circles(circle1, circle2, circle3):
     r1 = circle1.r
     r2 = circle2.r
     r3 = circle3.r
-    A1 = (pow(x1, 2) - pow(x2, 2) + pow(y1, 2) - pow(y2, 2) + pow(r2, 2) - pow(r1, 2)) * (r1 - r3)
-    A2 = (pow(x1, 2) - pow(x3, 2) + pow(y1, 2) - pow(y3, 2) + pow(r3, 2) - pow(r1, 2)) * (r1 - r2)
-    B1 = (pow(x2, 2) - pow(x3, 2) + pow(y2, 2) - pow(y3, 2) + pow(r3, 2) - pow(r2, 2)) * (r1 - r3)
-    B2 = (pow(x1, 2) - pow(x3, 2) + pow(y1, 2) - pow(y3, 2) + pow(r3, 2) - pow(r1, 2)) * (r2 - r3)
-    Dx = (x3 - x1) * (r1 - r2) - (x2 - x1) * (r1 - r3)
-    Dy = (y3 - y1) * (r1 - r2) + (y2 - y1) * (r1 - r3)
-    Ex = (x3 - x1) * (r2 - r3) - (x3 - x2) * (r1 - r3)
-    Ey = (y3 - y1) * (r2 - r3) + (y3 - y2) * (r1 - r3)
-    print x1,y1,x2,y2,x3,y3
-    print r1,r2,r3
-    print Dy,Ex,Ey,Dx
-    # print r
-    y = ((A1 - A2) * Ex - (B1 - B2) * Dx) / (Dy * Ex - Ey * Dx) / 2
-    x = ((A1 - A2) - 2 * y * Dy) / (2 * Dx)
-    r = math.sqrt(pow(x - x1, 2) + pow(y - y1, 2)) - r1
+    k1 = ((r2 - r3) / (x2 - x3) - (r1 - r2) / (x1 - x2)) / ((y1 - y2) / (x1 - x2) - (y2 - y3) / (x2 - x3))
+    b1 = ((p(x1) - p(x2) + p(y1) - p(y2) - p(r1) + p(r2))/(2*(x1-x2)) - (p(x2) - p(x3) + p(y2) - p(y3) - p(r2) + p(r3))/(2*(x2-x3)))/((y1 - y2) / (x1 - x2) - (y2 - y3) / (x2 - x3))
+    k2 = (r3-r2)/(x2-x3) - k1*(y2-y3)/(x2 - x3)
+    b2 = (p(x2) - p(x3) + p(y2) - p(y3) - p(r2) + p(r3))/(2*(x2-x3)) - b1*(y2-y3)/(x2-x3)
 
+    a = p(k2) + p(k1) - 1
+    b = 2*k2*(b2-x1) + 2*k1*(b1-y1) - 2*r1
+    c = p(b2-x1) + p(b1-y1) - p(r1)
+
+    r = -c/b
+    x = k2*r + b2
+    y = k1*r + b1
     return Circle1(Point(x, y), r)
 
 
@@ -97,7 +93,6 @@ def surround_by_2circles_and_1edge(circle1, circle2, edge2):
     y1 = circle1.point.y
     x2 = circle2.point.x
     y2 = circle2.point.y
-    print A,B,C
     r = pow((math.sqrt(r1 * r2) / (math.sqrt(r1) + math.sqrt(r2))), 2)
     theta1 = (pow(r1, 2) - pow(r2, 2) + 2 * r * (r1 - r2) - pow(x1, 2) + pow(x2, 2) - pow(y1, 2) + pow(y2, 2)) / 2
     theta2 = r * math.sqrt(pow(A, 2) + pow(B, 2)) - C
@@ -105,7 +100,6 @@ def surround_by_2circles_and_1edge(circle1, circle2, edge2):
         theta2 = -theta2
     y = (theta2 * (x2 - x1) - theta1 * A) / (B * (x2 - x1) - A * (y2 - y1))
     x = (theta1 - y*(y2-y1))/(x2-x1)
-    print x,y
     return Circle1(Point(x, y), r)
 
 
@@ -154,19 +148,17 @@ def main(N):
     queue.append(suroundings(1, [edge4, edge1], [circle0]))
     while len(queue) > 0 and N >= 0:
         surrounding = queue.pop(0)
-        print surrounding.type
         newCircle = surrounding.circle
         for surround in surrounding.new_surroundings():
-            for i in range(len(queue)-1, -1, -1):
-                if surround.circle.r < queue[i].circle.r:
-                    if i == 0:
-                        queue.append(surround)
-                else:
+            for i in range(0, len(queue)):
+                if surround.circle.r >= queue[i].circle.r:
                     queue.insert(i, surround)
                     break
+                if i == len(queue) - 1:
+                    queue.append(surround)
+
         result.append(newCircle)
         N -= 1
-        # print(newCircle.point.x, newCircle.point.y)
     return result
 
 
@@ -190,4 +182,4 @@ def plot(result):
         turtle.circle(item.r*300)
     turtle.exitonclick()
 
-plot(main(4))
+result = main(100)
