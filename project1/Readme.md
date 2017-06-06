@@ -218,13 +218,13 @@ plot(result)
 
 ## 6. Test results
 - m = 4 
- ![Alt text](./Screenshot from 2017-06-01 16-17-32.png)
+ ![Alt text](./1.png)
  - m = 12
- ![Alt text](./Screenshot from 2017-06-01 16-17-55.png)
+ ![Alt text](./2.png)
 - m = 36
-![Alt text](./Screenshot from 2017-06-01 16-21-10.png)
+ ![Alt text](./3.png)
 - m =100
-![Alt text](./Screenshot from 2017-06-01 15-06-07.png)
+ ![Alt text](./4.png)
 
 
 ## 7. Store my code
