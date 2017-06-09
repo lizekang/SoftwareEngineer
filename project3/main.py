@@ -7,9 +7,10 @@ import turtle
 
 
 class Point(object):
-    def __init__(self, x, y):
+    def __init__(self, x, y, z):
         self.x = x
         self.y = y
+        self.z = z
 
 
 class Edge(object):
@@ -17,6 +18,11 @@ class Edge(object):
         self.A = point2.y - point1.y
         self.B = point1.x - point2.x
         self.C = point2.x*point1.y - point1.x*point2.y
+
+
+class Plane(object):
+    def __init__(self, point1, point2, point3):
+
 
 
 class Circle1(object):
@@ -61,10 +67,13 @@ def point2edge(point, edge):
 def surround_by_3circles(circle1, circle2, circle3):
     x1 = circle1.point.x
     y1 = circle1.point.y
+    z1 = circle1.point.z
     x2 = circle2.point.x
     y2 = circle2.point.y
+    z2 = circle2.point.z
     x3 = circle3.point.x
     y3 = circle3.point.y
+    z3 = circle3.point.z
     r1 = circle1.r
     r2 = circle2.r
     r3 = circle3.r
@@ -183,4 +192,3 @@ def plot(result):
     turtle.exitonclick()
 
 result = main(100)
-
